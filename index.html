@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Time Capsule</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        max-width: 480px;
+        margin: 4rem auto;
+        padding: 0 1rem;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      label {
+        display: block;
+        margin-top: 1rem;
+        font-weight: 600;
+      }
+      input,
+      textarea {
+        width: 100%;
+        padding: 0.5rem;
+        margin-top: 0.25rem;
+        box-sizing: border-box;
+      }
+      textarea {
+        min-height: 120px;
+      }
+      button {
+        margin-top: 1.5rem;
+        padding: 0.6rem 1.2rem;
+        cursor: pointer;
+      }
+      #status {
+        margin-top: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>✉️ Send a message to your future self</h1>
+    <form id="capsule-form">
+      <label
+        >Your email
+        <input type="email" name="email" required />
+      </label>
+      <label
+        >Message
+        <textarea name="message" required></textarea>
+      </label>
+      <label
+        >Deliver on
+        <input type="date" name="deliverAt" required />
+      </label>
+      <button type="submit">Seal the capsule</button>
+    </form>
+    <div id="status"></div>
+
+    <script>
+      const form = document.getElementById("capsule-form");
+      const status = document.getElementById("status");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        status.textContent = "Sealing...";
+
+        const data = Object.fromEntries(new FormData(form));
+        // Turn the date input into an ISO timestamp (delivers at 09:00 that day).
+        data.deliverAt = new Date(data.deliverAt + "T09:00:00").toISOString();
+
+        try {
+          const res = await fetch("/.netlify/functions/submit-message", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+          if (!res.ok) throw new Error(await res.text());
+          status.textContent = "✅ Sealed! Check your inbox on the day.";
+          form.reset();
+        } catch (err) {
+          status.textContent = "❌ " + err.message;
+        }
+      });
+    </script>
+  </body>
+</html>

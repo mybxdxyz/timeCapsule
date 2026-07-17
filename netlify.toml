@@ -1,0 +1,8 @@
+[build]
+  publish = "public"
+  functions = "netlify/functions"
+
+# Scheduled function: runs once a day at 09:00 UTC to check for
+# and send any due time capsule messages.
+[functions."send-due-messages"]
+  schedule = "0 9 * * *"
