@@ -3,7 +3,7 @@
 // emails them, then marks them sent.
 
 const postgres = require('postgres');
-const { Resend } = require('resend');
+const nodemailer = require('nodemailer');
 
 let sql;
 function getSql() {
@@ -17,7 +17,13 @@ function getSql() {
   return sql;
 }
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.GMAIL_USER,       // e.g. yourname@gmail.com
+    pass: process.env.GMAIL_APP_PASSWORD, // 16-character app password, not your normal password
+  },
+});
 
 exports.handler = async () => {
   const sql = getSql();
@@ -34,8 +40,8 @@ exports.handler = async () => {
 
   for (const row of due) {
     try {
-      await resend.emails.send({
-        from: 'Time Capsule <onboarding@resend.dev>',
+      await transporter.sendMail({
+        from: `"Time Capsule" <${process.env.GMAIL_USER}>`,
         to: row.email,
         subject: 'A message from your past self',
         text: row.message,
