@@ -1,10 +1,19 @@
 // POST /.netlify/functions/submit-message
 // Body: { email, message, deliverAt }  (deliverAt = ISO date string)
 
-const { getConnectionString } = require('@netlify/database');
 const postgres = require('postgres');
 
-const sql = postgres(getConnectionString());
+let sql;
+function getSql() {
+  if (!sql) {
+    const connectionString = process.env.NETLIFY_DB_URL;
+    if (!connectionString) {
+      throw new Error('NETLIFY_DB_URL is not set in this environment');
+    }
+    sql = postgres(connectionString);
+  }
+  return sql;
+}
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
@@ -28,6 +37,7 @@ exports.handler = async (event) => {
   }
 
   try {
+    const sql = getSql();
     await sql`
       INSERT INTO messages (email, message, deliver_at)
       VALUES (${email}, ${message}, ${deliverDate.toISOString()})

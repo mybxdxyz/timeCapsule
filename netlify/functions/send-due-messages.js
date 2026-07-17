@@ -2,14 +2,25 @@
 // Finds any messages whose deliver_at has passed and haven't been sent,
 // emails them, then marks them sent.
 
-const { getConnectionString } = require('@netlify/database');
 const postgres = require('postgres');
 const { Resend } = require('resend');
 
-const sql = postgres(getConnectionString());
+let sql;
+function getSql() {
+  if (!sql) {
+    const connectionString = process.env.NETLIFY_DB_URL;
+    if (!connectionString) {
+      throw new Error('NETLIFY_DB_URL is not set in this environment');
+    }
+    sql = postgres(connectionString);
+  }
+  return sql;
+}
+
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 exports.handler = async () => {
+  const sql = getSql();
   const due = await sql`
     SELECT id, email, message
     FROM messages
