@@ -2,10 +2,11 @@
 // Finds any messages whose deliver_at has passed and haven't been sent,
 // emails them, then marks them sent.
 
-const { neon } = require('@netlify/neon');
+const { getConnectionString } = require('@netlify/database');
+const postgres = require('postgres');
 const { Resend } = require('resend');
 
-const sql = neon();
+const sql = postgres(getConnectionString());
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 exports.handler = async () => {

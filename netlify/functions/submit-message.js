@@ -1,9 +1,10 @@
 // POST /.netlify/functions/submit-message
 // Body: { email, message, deliverAt }  (deliverAt = ISO date string)
 
-const { neon } = require('@netlify/neon');
+const { getConnectionString } = require('@netlify/database');
+const postgres = require('postgres');
 
-const sql = neon(); // reads NETLIFY_DATABASE_URL automatically
+const sql = postgres(getConnectionString());
 
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
