@@ -35,7 +35,7 @@ exports.handler = async () => {
   for (const row of due) {
     try {
       await resend.emails.send({
-        from: 'Capsule onboarding@resend.dev', // update to a verified sender
+        from: 'Time Capsule <onboarding@resend.dev>',
         to: row.email,
         subject: 'A message from your past self',
         text: row.message,
