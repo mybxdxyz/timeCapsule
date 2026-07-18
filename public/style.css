@@ -1,0 +1,113 @@
+@import url('https://fonts.googleapis.com/css2?family=Jim+Nightshade&display=swap');
+
+* {
+  cursor: url('cursor.png') 2 30, auto;
+}
+
+body {
+  background: url('vintage.png');
+  font-family: system-ui, sans-serif;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  max-width: 480px;
+  margin: 4rem auto;
+  padding: 0 1rem;
+}
+
+h1 {
+  font-family: "Jim Nightshade";
+  font-size: 2.5rem;
+}
+
+h1::first-letter {
+  font-size: 6rem;
+  float: left;
+  line-height: 0.8;
+  padding-right: .05em;
+  font-family: "Jim Nightshade";
+
+}
+
+label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 600;
+}
+
+input,
+textarea {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.25rem;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  transition: all .3s ease;
+  box-shadow: 0 0 8px #0ff, 0 0 16px #0ff;
+  background: rgba(0, 0, 0, 0.6);
+  color: lemonchiffon;
+  caret-color: #f1f;
+
+  &:focus {
+    transform: scale(1.2);
+    box-shadow: 0 0 8px #f00, 0 0 16px #f00;
+  }
+}
+
+textarea {
+  resize: none;
+  min-height: 120px;
+}
+
+button {
+  margin-top: 1.5rem;
+  padding: 0.6rem 1.2rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 24px;
+  transition: all .3s ease;
+  background-color: #2f1b15;
+  color: lemonchiffon;
+
+  &:hover,
+  &:focus {
+    animation: wobble 1s ease-in-out;
+  }
+}
+
+#status {
+  margin-top: 1rem;
+  font-family: monospace;
+}
+
+
+@keyframes wobble {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  15% {
+    transform: translate3d(-25%, 0, 0) rotate3d(0, 0, 1, -5deg);
+  }
+
+  30% {
+    transform: translate3d(20%, 0, 0) rotate3d(0, 0, 1, 3deg);
+  }
+
+  45% {
+    transform: translate3d(-15%, 0, 0) rotate3d(0, 0, 1, -3deg);
+  }
+
+  60% {
+    transform: translate3d(10%, 0, 0) rotate3d(0, 0, 1, 2deg);
+  }
+
+  75% {
+    transform: translate3d(-5%, 0, 0) rotate3d(0, 0, 1, -1deg);
+  }
+
+  to {
+    transform: translate3d(0, 0, 0);
+  }
+}
