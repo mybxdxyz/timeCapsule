@@ -43,7 +43,7 @@
           body: JSON.stringify(data),
         });
         if (!res.ok) throw new Error(await res.text());
-        status.textContent = "✅ Sealed! Check your inbox on the day.";
+        status.textContent = "✅ Sealed tight!";
         form.reset();
       } catch (err) {
         status.textContent = "❌ " + err.message;
